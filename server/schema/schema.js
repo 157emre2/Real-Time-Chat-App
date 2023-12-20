@@ -167,10 +167,96 @@ const Mutation = new GraphQLObjectType({
                     email: args.email
                 }, {new: true});
             }
-        }
+        },
+        deleteUser: {
+            type: UserType,
+            args: { id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args){
+                return User.findByIdAndDelete(args.id);
+            }
+        },
         //Add-Update-Delete Chat Mutations
+        addChat:{
+            type: ChatType,
+            args:{
+                title: { type: new GraphQLNonNull(GraphQLString)},
+                chat_type: { type: new GraphQLNonNull(GraphQLString)},
+                usersId: { type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+                createdAt: { type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parent,args){
+                let chat = new Chat({
+                    title: args.title,
+                    chat_type: args.chat_type,
+                    usersId: args.usersId,
+                    createdAt: args.createdAt
+                });
+                return chat.save();
+            }
+        },
+        updateChat:{
+            type: ChatType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID)},
+                title: { type: GraphQLString },
+                chat_type: { type: GraphQLString },
+                usersId: { type: new GraphQLList(GraphQLString)},
+                lastMessageId: { type: GraphQLString }
+            },
+            resolve(parent,args){
+                return Chat.findByIdAndUpdate(args.id, {
+                    title: args.title,
+                    chat_type: args.chat_type,
+                    usersId: args.usersId,
+                    lastMessageId: args.lastMessageId
+                }, { new: true});
+            }
+        },
+        deleteChat: {
+            type: ChatType,
+            args: { id: { type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent,args){
+                return Chat.findByIdAndDelete(args.id);
+            }
+        },
         //Add-Update-Delete Message Mutations
-
+        addMessage:{
+            type: MessageType,
+            args:{
+                message: new GraphQLNonNull(GraphQLString),
+                date: new GraphQLNonNull(GraphQLString),
+                senderId: new GraphQLNonNull(GraphQLID),
+                receiverId: new GraphQLNonNull(GraphQLID)
+            },
+            resolve(parent,args){
+                let message = new Message({
+                    message: args.message,
+                    date: args.date,
+                    senderId: args.senderId,
+                    receiverId: args.receiverId
+                });
+                return message.save();
+            }
+        },
+        updateMessage: {
+            type: MessageType,
+            args: {
+                id: new GraphQLNonNull(GraphQLID),
+                message: GraphQLString
+            },
+            resolve(parent,args){
+                return Message.findByIdAndUpdate(args.id,{
+                    message: args.message
+                },{ new: true});
+            }
+        },
+        deleteMessage: {
+            type: MessageType,
+            args: { id: { type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent,args){
+                return Message.findByIdAndDelete(args.id);
+            }
+        }
     }
 });
 
