@@ -2,6 +2,8 @@ const graphql = require('graphql');
 const Message = require('../models/message');
 const User = require('../models/user');
 const Chat = require('../models/chat');
+const { PubSub} = require('graphql-subscriptions');
+const pubsub = new PubSub();
 
 const {
     GraphQLObjectType,
@@ -235,7 +237,11 @@ const Mutation = new GraphQLObjectType({
                     senderId: args.senderId,
                     receiverId: args.receiverId
                 });
-                return message.save();
+                message.save().then(() => {
+                    pubsub.publish('messageAdded', {messageAdded: message});
+                });
+
+                return message;
             }
         },
         updateMessage: {
@@ -260,8 +266,19 @@ const Mutation = new GraphQLObjectType({
     }
 });
 
+const Subscription = new GraphQLObjectType({
+   name: 'Subscription',
+   fields: {
+        messageAdded: {
+            type: MessageType,
+            subscribe: () => pubsub.asyncIterator('messageAdded')
+        }
+   }
+});
+
 
 module.exports = new GraphQLSchema({
     query: RootQuery,
-    mutation: Mutation
+    mutation: Mutation,
+    subscription: Subscription
 });
