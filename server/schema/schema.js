@@ -149,7 +149,10 @@ const Mutation = new GraphQLObjectType({
                    password: args.password,
                    email: args.email
                 });
-                return user.save();
+                user.save().then(() => {
+                    pubsub.publish('userAdded', { userAdded: user});
+                });
+                return user;
             }
         },
         updateUser: {
@@ -193,7 +196,10 @@ const Mutation = new GraphQLObjectType({
                     usersId: args.usersId,
                     createdAt: args.createdAt
                 });
-                return chat.save();
+                chat.save().then(() => {
+                    pubsub.publish('chatAdded', {chatAdded: chat});
+                });
+                return chat;
             }
         },
         updateChat:{
@@ -272,7 +278,15 @@ const Subscription = new GraphQLObjectType({
         messageAdded: {
             type: MessageType,
             subscribe: () => pubsub.asyncIterator('messageAdded')
-        }
+        },
+       chatAdded: {
+            type: ChatType,
+            subscribe: () => pubsub.asyncIterator('chatAdded')
+       },
+       userAdded: {
+            type: UserType,
+            subscribe: () => pubsub.asyncIterator('userAdded')
+       }
    }
 });
 
