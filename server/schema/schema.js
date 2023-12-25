@@ -231,10 +231,10 @@ const Mutation = new GraphQLObjectType({
         addMessage:{
             type: MessageType,
             args:{
-                message: new GraphQLNonNull(GraphQLString),
-                date: new GraphQLNonNull(GraphQLString),
-                senderId: new GraphQLNonNull(GraphQLID),
-                receiverId: new GraphQLNonNull(GraphQLID)
+                message: {type: new GraphQLNonNull(GraphQLString)},
+                date: {type: new GraphQLNonNull(GraphQLString)},
+                senderId: {type: new GraphQLNonNull(GraphQLID)},
+                receiverId: {type: new GraphQLNonNull(GraphQLID)}
             },
             resolve(parent,args){
                 let message = new Message({
@@ -253,8 +253,8 @@ const Mutation = new GraphQLObjectType({
         updateMessage: {
             type: MessageType,
             args: {
-                id: new GraphQLNonNull(GraphQLID),
-                message: GraphQLString
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                message: {type: GraphQLString}
             },
             resolve(parent,args){
                 return Message.findByIdAndUpdate(args.id,{
