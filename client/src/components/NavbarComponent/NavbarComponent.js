@@ -1,17 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import darkLogo from '../../img/darkLongLogo.svg';
-import {StyledNav} from "./NavbarComponent.styled";
+import lightLogo from '../../img/lightLongLogo.svg';
+import {StyledA, StyledList, StyledNav} from "./NavbarComponent.styled";
 
 function NavbarComponent(props){
-    let newTheme = props.theme === "light" ? "dark" : "light";
+    const [logoType, setLogoType] = useState(`${darkLogo}`);
+
+    let logoTypee = logoType === darkLogo ? lightLogo : darkLogo;
+
     const setTheme = () => {
+        let newTheme = props.theme === "light" ? "dark" : "light";
         props.updateTheme(newTheme);
     };
 
     return(
         <StyledNav>
             <div>
-                <img src={darkLogo} height={150}/>
+                <img src={logoType} height={150}/>
             </div>
             <div>
                 <ul>
@@ -22,9 +27,9 @@ function NavbarComponent(props){
                 </ul>
             </div>
             <div>
+                <button onClick={setTheme}>Change Theme</button>
                 <button>Login</button>
                 <button>Sign Up</button>
-                <button onClick={setTheme}>Change Theme</button>
             </div>
         </StyledNav>
     );
