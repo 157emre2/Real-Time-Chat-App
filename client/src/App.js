@@ -9,7 +9,7 @@ import { ThemeProvider } from "styled-components";
 import {useState} from "react";
 
 function App() {
-    const [the, setTheme] = useState("light");
+    const [the, setTheme] = useState("dark");
     const themeCallBackFunction = (th) => {
         setTheme(th);
     };

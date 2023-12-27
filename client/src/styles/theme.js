@@ -20,8 +20,8 @@ export const themeSettings = {
     light: {
         backgroundColor: theme_colors.light_blue,
         textColor: 'black',
-        logoLong: '..\\client\\src\\img\\lightLongLogo.svg',
-        logoShort: '..\\client\\src\\img\\lightShortLogo.svg',
+        gradient_left: theme_colors.gradient_left,
+        gradient_right: theme_colors.gradient_right,
         button: {
             normal: {
                 textColor: theme_colors.light_blue,
@@ -42,8 +42,8 @@ export const themeSettings = {
     dark: {
         backgroundColor: theme_colors.prussian_blue,
         textColor: 'white',
-        logoLong: '..\\client\\src\\img\\darkLongLogo.svg',
-        logoShort: '..\\client\\src\\img\\darkShortLogo.svg',
+        gradient_left: theme_colors.gradient_left,
+        gradient_right: theme_colors.gradient_right,
         button: {
             normal: {
                 textColor: theme_colors.prussian_blue,
