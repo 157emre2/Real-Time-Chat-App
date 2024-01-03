@@ -2,9 +2,7 @@ import React, {useState} from "react";
 import darkLogo from '../../img/darkLongLogo.svg';
 import lightLogo from '../../img/lightLongLogo.svg';
 import {
-    StyledA,
     StyledButtonDiv,
-    StyledInputDiv,
     StyledList,
     StyledNav,
     StyledSliderDiv,
@@ -29,10 +27,9 @@ function NavbarComponent(props){
             </div>
             <div>
                 <StyledList>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#header">Home</a></li>
+                    <li><a href="#aboutus">About Us</a></li>
+                    <li><a href="#features">Features</a></li>
                 </StyledList>
             </div>
             <StyledButtonDiv>

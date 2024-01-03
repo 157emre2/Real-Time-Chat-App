@@ -62,6 +62,7 @@ export const StyledSwitch = styled.label`
 
 export const StyledSliderDiv = styled.div`
     background-color: #468fafff;
+    border-radius: 20px;
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -72,6 +73,7 @@ export const StyledSliderDiv = styled.div`
     
     &:before {
         background-color: #fff;
+        border-radius: 50%;
         bottom: 4px;
         content: "";
         height: 26px;

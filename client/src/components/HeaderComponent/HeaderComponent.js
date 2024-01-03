@@ -5,7 +5,7 @@ import {StyledHeader} from "./HeaderComponent.styled";
 
 function HeaderComponent(){
     return(
-        <StyledHeader>
+        <StyledHeader id={"header"}>
             <div>
                 <div>
                     <p>Easy</p>
@@ -15,7 +15,7 @@ function HeaderComponent(){
                 <StyledButton type={"outline"}>Sign Up</StyledButton>
             </div>
             <div>
-                <img src={chat_tel}/>
+                <img src={chat_tel} height={600}/>
             </div>
         </StyledHeader>
     );

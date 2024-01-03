@@ -5,7 +5,7 @@ export const StyledHeader = styled.header`
     align-items: center;
     justify-content: space-between;
     padding-left: 3rem;
-    height: 50vh;
+    height: 100vh;
     background: #a9d6e5ff;
     background: ${({theme}) => theme.gradient_left};
     
