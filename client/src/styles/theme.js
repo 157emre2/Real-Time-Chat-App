@@ -1,3 +1,5 @@
+import {withMutation} from "@apollo/client/react/hoc";
+
 const theme_colors = {
     prussian_blue: "#012a4aff",
     indigo_dye: "#013a63ff",
@@ -22,6 +24,8 @@ export const themeSettings = {
         textColor: 'black',
         gradient_left: theme_colors.gradient_left,
         gradient_right: theme_colors.gradient_right,
+        gradient_bottom: theme_colors.gradient_bottom,
+        gradient_top: theme_colors.gradient_top,
         button: {
             normal: {
                 textColor: theme_colors.light_blue,
@@ -44,6 +48,8 @@ export const themeSettings = {
         textColor: 'white',
         gradient_left: theme_colors.gradient_left,
         gradient_right: theme_colors.gradient_right,
+        gradient_bottom: theme_colors.gradient_bottom,
+        gradient_top: theme_colors.gradient_top,
         button: {
             normal: {
                 textColor: theme_colors.prussian_blue,

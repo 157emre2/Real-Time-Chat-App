@@ -8,7 +8,8 @@ import {
     StyledSliderDiv,
     StyledSwitch
 } from "./NavbarComponent.styled";
-import {StyledButton} from "../../styles/ButtonStyle";
+import {StyledButton, StyledLink} from "../../styles/ButtonStyle";
+import {Link} from "react-router-dom";
 
 function NavbarComponent(props){
     const [logoType, setLogoType] = useState(`${lightLogo}`);
@@ -33,8 +34,8 @@ function NavbarComponent(props){
                 </StyledList>
             </div>
             <StyledButtonDiv>
-                <StyledButton type={"outline"}>Login</StyledButton>
-                <StyledButton type={"outline"}>Sign Up</StyledButton>
+                <StyledLink type={"outline"} to={"/login"}>Login</StyledLink>
+                <StyledLink type={"outline"} to={"/register"}>Sign Up</StyledLink>
                 <div>
                     <StyledSwitch htmlFor={"checkbox"}>
                         <input type={"checkbox"} id={"checkbox"} onChange={setTheme}/>
