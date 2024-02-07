@@ -2,11 +2,14 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema/schema');
 const mongoose = require("mongoose");
+const cors = require('cors');
 
 const app = express();
 
 require('dotenv').config({path: '../.env'});
 const dbPw = process.env.MLAB_PASSWORD;
+
+app.use(cors());
 
 mongoose.connect(`mongodb+srv://admin:${dbPw}@merntry.peg7i05.mongodb.net/?retryWrites=true&w=majority`);
 mongoose.connection.once('open', () => {

@@ -226,6 +226,7 @@ const Mutation = new GraphQLObjectType({
             resolve(parent,args){
                 return Chat.findByIdAndDelete(args.id);
             }
+
         },
         //Add-Update-Delete Message Mutations
         addMessage:{

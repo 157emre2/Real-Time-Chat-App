@@ -1,9 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import {GeneralDiv, StyledDiv} from "./LoginComponent.styled";
 import {StyledButton} from "../../styles/ButtonStyle";
 import {Link} from "react-router-dom";
 
 function LoginComponent() {
+    const [formState, setFormState] = useState({
+        username: "",
+        password: ""
+    })
+
+    //const [logincheck] =
+
     return (
         <GeneralDiv>
             <StyledDiv>
@@ -13,12 +20,12 @@ function LoginComponent() {
                 <div>
                     <form>
                         <div>
-                            <label htmlFor={"username_"} r>Username</label>
-                            <input type={"text"} id={"username_"}/>
+                            <label htmlFor={"username_"}>Username</label>
+                            <input type={"text"} id={"username_"} onChange={(e) => setFormState({...formState, username: e.target.value})}/>
                         </div>
                         <div>
-                            <label htmlFor={"password_"} r>Password</label>
-                            <input type={"text"} id={"password_"}/>
+                            <label htmlFor={"password_"}>Password</label>
+                            <input type={"text"} id={"password_"} onChange={(e) => setFormState({...formState, password: e.target.value})}/>
                         </div>
                         <div className={"login_footer"}>
                             <StyledButton type={"outline"}>Login</StyledButton>

@@ -1,9 +1,10 @@
 import React from "react";
+import RegisterComponent from "../components/RegisterComponent/RegisterComponent";
 
 function RegisterPage(){
     return(
         <div>
-            <p>Register Page</p>
+            <RegisterComponent />
         </div>
     );
 }

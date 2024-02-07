@@ -17,7 +17,6 @@ export const StyledDiv = styled.div`
     background-color: white;
     font-size: 1.6rem;
     transition: .3s all;
-    height: 25vh;
     width: 20vw;
 
     &:hover {
