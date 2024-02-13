@@ -4,6 +4,8 @@ const User = require('../models/user');
 const Chat = require('../models/chat');
 const { PubSub} = require('graphql-subscriptions');
 const pubsub = new PubSub();
+const bcyrpt = require('bcrypt');
+const saltRounds = 10;
 
 const {
     GraphQLObjectType,
@@ -120,6 +122,13 @@ const RootQuery = new GraphQLObjectType({
                 return User.findById(args.id);
             }
         },
+        userSearch: {
+          type: UserType,
+          args: { username: { type: GraphQLString }},
+          resolve(parent,args){
+              return User.findOne({username: args.username});
+          }
+        },
         users: {
             type: new GraphQLList(UserType),
             resolve(parent,args){
@@ -142,17 +151,25 @@ const Mutation = new GraphQLObjectType({
                 password: { type: new GraphQLNonNull(GraphQLString)},
                 email: { type: new GraphQLNonNull(GraphQLString)}
             },
-            resolve(parent,args){
-                 let user = new User({
-                   name: args.name,
-                   username: args.username,
-                   password: args.password,
-                   email: args.email
-                });
-                user.save().then(() => {
-                    pubsub.publish('userAdded', { userAdded: user});
-                });
-                return user;
+            async resolve(parent,args){
+                try{
+                    const hashedPassword = await bcyrpt.hash(args.password,10);
+
+                    const user = new User({
+                        name: args.name,
+                        username: args.username,
+                        email: args.email,
+                        password: hashedPassword
+                    });
+
+                    user.save().then(() => {
+                        pubsub.publish('userAdded', {userAdded: user});
+                    });
+
+                    return user;
+                } catch (err) {
+                    console.log(err);
+                }
             }
         },
         updateUser: {
@@ -164,13 +181,19 @@ const Mutation = new GraphQLObjectType({
                 password: { type: GraphQLString },
                 email: { type: GraphQLString }
             },
-            resolve(parent, args){
-                return User.findByIdAndUpdate(args.id, {
-                    name: args.name,
-                    username: args.username,
-                    password: args.password,
-                    email: args.email
-                }, {new: true});
+            async resolve(parent, args){
+                try {
+                    const hshpw = await bcyrpt.hash(args.password, saltRounds);
+
+                    return User.findByIdAndUpdate(args.id, {
+                        name: args.name,
+                        username: args.username,
+                        password: hshpw,
+                        email: args.email
+                    }, {new: true});
+                }catch (err) {
+                    console.log(err)
+                }
             }
         },
         deleteUser: {
@@ -237,18 +260,25 @@ const Mutation = new GraphQLObjectType({
                 senderId: {type: new GraphQLNonNull(GraphQLID)},
                 receiverId: {type: new GraphQLNonNull(GraphQLID)}
             },
-            resolve(parent,args){
-                let message = new Message({
-                    message: args.message,
-                    date: args.date,
-                    senderId: args.senderId,
-                    receiverId: args.receiverId
-                });
-                message.save().then(() => {
-                    pubsub.publish('messageAdded', {messageAdded: message});
-                });
+            async resolve(parent,args){
+                try {
+                    const hshdmessge = await bcyrpt.hash(args.message,saltRounds);
 
-                return message;
+                    let message = new Message({
+                        message: hshdmessge,
+                        date: args.date,
+                        senderId: args.senderId,
+                        receiverId: args.receiverId
+                    });
+                    message.save().then(() => {
+                        pubsub.publish('messageAdded', {messageAdded: message});
+                    });
+
+                    return message;
+
+                }catch (err) {
+                    console.log(err);
+                }
             }
         },
         updateMessage: {
@@ -257,10 +287,16 @@ const Mutation = new GraphQLObjectType({
                 id: {type: new GraphQLNonNull(GraphQLID)},
                 message: {type: GraphQLString}
             },
-            resolve(parent,args){
-                return Message.findByIdAndUpdate(args.id,{
-                    message: args.message
-                },{ new: true});
+            async resolve(parent,args){
+                try {
+                    const hshmessage = await bcyrpt.hash(args.message, saltRounds);
+
+                    return Message.findByIdAndUpdate(args.id,{
+                        message: hshmessage
+                    },{ new: true});
+                }catch (err) {
+                    console.log(err);
+                }
             }
         },
         deleteMessage: {

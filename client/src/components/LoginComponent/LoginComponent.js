@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {GeneralDiv, StyledDiv} from "./LoginComponent.styled";
 import {StyledButton} from "../../styles/ButtonStyle";
 import {Link} from "react-router-dom";
+import {useQuery} from "@apollo/client";
+import {USER_CHECK_QUERY} from "../../queries/USER_CHECK_QUERY";
 
 function LoginComponent() {
     const [formState, setFormState] = useState({
@@ -9,7 +11,13 @@ function LoginComponent() {
         password: ""
     })
 
-    //const [logincheck] =
+    const [logincheck] = useQuery(USER_CHECK_QUERY, {
+        variables: {
+            username: formState.username
+        }
+    })
+
+
 
     return (
         <GeneralDiv>
@@ -18,7 +26,11 @@ function LoginComponent() {
                     <h3>Login</h3>
                 </div>
                 <div>
-                    <form>
+                    <form onSubmit={(e) => {
+                       e.preventDefault();
+                       logincheck();
+
+                    }}>
                         <div>
                             <label htmlFor={"username_"}>Username</label>
                             <input type={"text"} id={"username_"} onChange={(e) => setFormState({...formState, username: e.target.value})}/>

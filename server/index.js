@@ -4,6 +4,7 @@ const schema = require('./schema/schema');
 const mongoose = require("mongoose");
 const cors = require('cors');
 
+
 const app = express();
 
 require('dotenv').config({path: '../.env'});
@@ -15,6 +16,8 @@ mongoose.connect(`mongodb+srv://admin:${dbPw}@merntry.peg7i05.mongodb.net/?retry
 mongoose.connection.once('open', () => {
     console.log('connected to database');
 });
+
+
 
 app.use('/graphql', graphqlHTTP({
     schema: schema,
