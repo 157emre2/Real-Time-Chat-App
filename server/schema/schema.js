@@ -6,6 +6,7 @@ const { PubSub} = require('graphql-subscriptions');
 const pubsub = new PubSub();
 const bcyrpt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
 
 const {
     GraphQLObjectType,
@@ -47,6 +48,14 @@ const UserType = new GraphQLObjectType({
         password: { type: GraphQLString },
         email: { type: GraphQLString },
     })
+});
+
+const AuthPayload = new GraphQLObjectType({
+   name: 'AuthPayload',
+   fields: () => ({
+       token: { type: GraphQLString },
+       user: { type: UserType }
+   })
 });
 
 const ChatType = new GraphQLObjectType({
@@ -304,6 +313,36 @@ const Mutation = new GraphQLObjectType({
             args: { id: { type: new GraphQLNonNull(GraphQLID)}},
             resolve(parent,args){
                 return Message.findByIdAndDelete(args.id);
+            }
+        },
+        //Login user Mutation
+        loginUser: {
+            type: AuthPayload,
+            args: {
+                username: { type: new GraphQLNonNull(GraphQLString)},
+                password: { type: new GraphQLNonNull(GraphQLString)}
+            },
+            async resolve(parent,args){
+                try {
+                    const user = await User.findOne({ username: args.username });
+                    if (!user) {
+                        console.log("User not found");
+                    }
+
+                     bcyrpt.compare(args.password, user.password, (err,isMatch) => {
+                        if (err || !isMatch) {
+                            console.log("Password Wrong");
+                        }
+                    });
+
+                    require('dotenv').config({path: '../.env'});
+                    const secretKey = process.env.SECRET_KEY;
+                    const token = jwt.sign({userId: user.id}, secretKey, {expiresIn: '1h'});
+                    return {token, user};
+
+                }catch (err){
+                    console.log(err);
+                }
             }
         }
     }

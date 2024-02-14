@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import {GeneralDiv, StyledDiv} from "./LoginComponent.styled";
 import {StyledButton} from "../../styles/ButtonStyle";
 import {Link} from "react-router-dom";
-import {useQuery} from "@apollo/client";
-import {USER_CHECK_QUERY} from "../../queries/USER_CHECK_QUERY";
+import {useMutation} from "@apollo/client";
+import {USER_CHECK_MUTATION} from "../../queries/USER_CHECK_MUTATION";
 
 function LoginComponent() {
     const [formState, setFormState] = useState({
@@ -11,9 +11,10 @@ function LoginComponent() {
         password: ""
     })
 
-    const [logincheck] = useQuery(USER_CHECK_QUERY, {
+    const [logincheck] = useMutation(USER_CHECK_MUTATION, {
         variables: {
-            username: formState.username
+            username: formState.username,
+            password: formState.password
         }
     })
 
