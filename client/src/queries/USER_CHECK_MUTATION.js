@@ -7,6 +7,7 @@ const USER_CHECK_MUTATION = gql`
         user{
           id
           name
+          username
         }
       }
 }

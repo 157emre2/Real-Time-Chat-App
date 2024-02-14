@@ -326,14 +326,13 @@ const Mutation = new GraphQLObjectType({
                 try {
                     const user = await User.findOne({ username: args.username });
                     if (!user) {
-                        console.log("User not found");
+                        return new Error("User not found");
                     }
 
-                     bcyrpt.compare(args.password, user.password, (err,isMatch) => {
-                        if (err || !isMatch) {
-                            console.log("Password Wrong");
-                        }
-                    });
+                    const x = bcyrpt.compareSync(args.password, user.password);
+                    if (!x) {
+                        return new Error('Password Wrong');
+                    }
 
                     require('dotenv').config({path: '../.env'});
                     const secretKey = process.env.SECRET_KEY;
@@ -341,7 +340,7 @@ const Mutation = new GraphQLObjectType({
                     return {token, user};
 
                 }catch (err){
-                    console.log(err);
+                    return new Error(err);
                 }
             }
         }

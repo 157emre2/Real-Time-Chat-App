@@ -11,14 +11,12 @@ function LoginComponent() {
         password: ""
     })
 
-    const [logincheck] = useMutation(USER_CHECK_MUTATION, {
+    const [logincheck, {error,data}] = useMutation(USER_CHECK_MUTATION, {
         variables: {
             username: formState.username,
             password: formState.password
         }
     })
-
-
 
     return (
         <GeneralDiv>
@@ -27,10 +25,12 @@ function LoginComponent() {
                     <h3>Login</h3>
                 </div>
                 <div>
-                    <form onSubmit={(e) => {
+                    <form onSubmit={ (e) => {
                        e.preventDefault();
                        logincheck();
-
+                       if (error) {
+                           console.log(error.message);
+                       }
                     }}>
                         <div>
                             <label htmlFor={"username_"}>Username</label>
