@@ -17,7 +17,11 @@ mongoose.connection.once('open', () => {
     console.log('connected to database');
 });
 
-
+app.get('/chat/:username', (req, res) => {
+    const username = req.params.username;
+    console.log(username);
+    res.type('text').send(username);
+});
 
 app.use('/graphql', graphqlHTTP({
     schema: schema,

@@ -7,6 +7,8 @@ const pubsub = new PubSub();
 const bcyrpt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+const {GraphQLError} = require("graphql/error");
+require('dotenv').config({path: '../.env'});
 
 const {
     GraphQLObjectType,
@@ -50,14 +52,21 @@ const UserType = new GraphQLObjectType({
     })
 });
 
+const Error = new GraphQLObjectType({
+   name: 'Error',
+   fields: () => ({
+       message: {type: GraphQLString}
+   })
+});
+
 const AuthPayload = new GraphQLObjectType({
    name: 'AuthPayload',
    fields: () => ({
        token: { type: GraphQLString },
-       user: { type: UserType }
+       user: { type: UserType },
+       error: { type: Error}
    })
 });
-
 const ChatType = new GraphQLObjectType({
    name: 'Chat',
    fields: () => ({
@@ -326,21 +335,21 @@ const Mutation = new GraphQLObjectType({
                 try {
                     const user = await User.findOne({ username: args.username });
                     if (!user) {
-                        return new Error("User not found");
+                        return {error: { message: "User not found"}};
                     }
 
-                    const x = bcyrpt.compareSync(args.password, user.password);
+                    const x = await bcyrpt.compareSync(args.password, user.password);
                     if (!x) {
-                        return new Error('Password Wrong');
+                        return {error: { message: "Password Wrong"}};
                     }
 
-                    require('dotenv').config({path: '../.env'});
+
                     const secretKey = process.env.SECRET_KEY;
-                    const token = jwt.sign({userId: user.id}, secretKey, {expiresIn: '1h'});
+                    const token = await jwt.sign({userId: user.id}, secretKey, {expiresIn: '1h'});
                     return {token, user};
 
                 }catch (err){
-                    return new Error(err);
+                    return {error: {message: err}};
                 }
             }
         }
