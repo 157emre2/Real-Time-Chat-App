@@ -7,7 +7,6 @@ const pubsub = new PubSub();
 const bcyrpt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-const {GraphQLError} = require("graphql/error");
 require('dotenv').config({path: '../.env'});
 
 const {

@@ -1,26 +1,30 @@
 import React, {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import AppPageComponent from "../components/AppPageComponent/AppPageComponent";
 
 const AppPage = () => {
 
     const [message, setMessage] = useState('');
-    const { username } = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        async function fetchUserData() {
+            try {
+                const response = await axios.get(`http://localhost:4000/chat/${id}`);
+                console.log(response.data);
+                setMessage(response.data.username);
+;            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
 
-
-    const fetchData = () => {
-        fetch(`/chat/${username}`)
-            .then(res => res.text())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-    };
+        fetchUserData();
+    }, [id]);
 
     return (
         <div>
-            <h1>{message}</h1>
+            <AppPageComponent />
         </div>
     );
 };

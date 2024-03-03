@@ -3,8 +3,7 @@ const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema/schema');
 const mongoose = require("mongoose");
 const cors = require('cors');
-
-
+const User = require('./models/user');
 const app = express();
 
 require('dotenv').config({path: '../.env'});
@@ -17,10 +16,15 @@ mongoose.connection.once('open', () => {
     console.log('connected to database');
 });
 
-app.get('/chat/:username', (req, res) => {
-    const username = req.params.username;
-    console.log(username);
-    res.type('text').send(username);
+app.get('/chat/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.json(user);
 });
 
 app.use('/graphql', graphqlHTTP({

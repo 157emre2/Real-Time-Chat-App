@@ -31,7 +31,7 @@ function LoginComponent() {
         if (data){
             if (data.loginUser.error === null){
                setLoginState(`Welcome ${data.loginUser.user.name}`);
-               navigate(`/chat/${data.loginUser.user.username}`);
+               navigate(`/chat/${data.loginUser.user.id}`);
             }else{
                 setLoginState(`${data.loginUser.error.message}`);
             }

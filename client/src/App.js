@@ -23,7 +23,7 @@ function App() {
                         <Route path="/" element={<HomePage callback={themeCallBackFunction} />} />
                         <Route path="/login" element={<LoginPage/>} />
                         <Route path="/register" element={<RegisterPage/>} />
-                        <Route path="/chat/:username" element={<AppPage/>} />
+                        <Route path="/chat/:id" element={<AppPage/>} />
                         <Route path="*" element={<HomePage/>}/>
                     </Routes>
                 </Router>
