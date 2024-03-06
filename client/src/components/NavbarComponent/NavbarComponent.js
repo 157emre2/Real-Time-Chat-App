@@ -8,18 +8,53 @@ import {
     StyledSliderDiv,
     StyledSwitch
 } from "./NavbarComponent.styled";
-import {StyledButton, StyledLink} from "../../styles/ButtonStyle";
-import {Link} from "react-router-dom";
+import {StyledLink} from "../../styles/ButtonStyle";
+import {useNavigate} from "react-router-dom";
+import {useMutation} from "@apollo/client";
+import {VERIFY_TOKEN_MUTATION} from "../../queries/VERIFY_TOKEN_MUTATION";
 
 function NavbarComponent(props){
     const [logoType, setLogoType] = useState(`${lightLogo}`);
     let newTheme = props.theme === "light" ? "dark" : "light";
     let logoTypee = logoType === darkLogo ? lightLogo : darkLogo;
+    const [token, setToken] = useState("1");
 
     const setTheme = () => {
         props.updateTheme(newTheme);
         setLogoType(logoTypee);
     };
+
+    const navigate = useNavigate();
+
+    const [verifyToken, {loading, data, error}] = useMutation(VERIFY_TOKEN_MUTATION,{
+        variables: {
+            token: token
+        }
+    })
+    async function tokenCheck(){
+        await setToken(localStorage.getItem("token (1h)"));
+
+        if (token === ""){
+            navigate('/login');
+        }
+
+        await verifyToken();
+        if (loading){
+            console.log("loading..");
+        }
+        if (error){
+            console.log(error);
+        }
+        if (data){
+            console.log(data);
+            if (data.verifyToken.success === true){
+                navigate(`/chat/${data.verifyToken.user.id}`);
+            }else {
+                navigate('/login');
+            }
+        }
+
+    }
 
     return(
         <StyledNav>
@@ -34,7 +69,7 @@ function NavbarComponent(props){
                 </StyledList>
             </div>
             <StyledButtonDiv>
-                <StyledLink type={"outline"} to={"/login"}>Login</StyledLink>
+                <StyledLink type={"outline"} onClick={tokenCheck}>Login</StyledLink>
                 <StyledLink type={"outline"} to={"/register"}>Sign Up</StyledLink>
                 <div>
                     <StyledSwitch htmlFor={"checkbox"}>

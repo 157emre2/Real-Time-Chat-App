@@ -5,7 +5,7 @@ function ChatCardComponent(){
     return(
         <Card>
             <h3>Name</h3>
-            <p><i className={"fa-solid fa-check-double"}></i> <i class="fa-solid fa-check"></i> Last Message</p>
+            <p><i className={"fa-solid fa-check-double"}></i> <i className="fa-solid fa-check"></i> Last Message</p>
         </Card>
     );
 }

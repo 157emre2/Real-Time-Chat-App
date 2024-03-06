@@ -5,11 +5,14 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const User = require('./models/user');
 const app = express();
+//const protectedRoutes = require('middleware/protectedRoutes');
 
 require('dotenv').config({path: '../.env'});
 const dbPw = process.env.MLAB_PASSWORD;
 
 app.use(cors());
+
+//app.use('/chat',protectedRoutes);
 
 mongoose.connect(`mongodb+srv://admin:${dbPw}@merntry.peg7i05.mongodb.net/?retryWrites=true&w=majority`);
 mongoose.connection.once('open', () => {

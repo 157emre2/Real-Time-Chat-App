@@ -7,7 +7,9 @@ const pubsub = new PubSub();
 const bcyrpt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+const {GraphQLBoolean} = require("graphql/type");
 require('dotenv').config({path: '../.env'});
+const config = require('config');
 
 const {
     GraphQLObjectType,
@@ -63,7 +65,8 @@ const AuthPayload = new GraphQLObjectType({
    fields: () => ({
        token: { type: GraphQLString },
        user: { type: UserType },
-       error: { type: Error}
+       error: { type: Error},
+       success: { type: GraphQLBoolean}
    })
 });
 const ChatType = new GraphQLObjectType({
@@ -349,6 +352,19 @@ const Mutation = new GraphQLObjectType({
 
                 }catch (err){
                     return {error: {message: err}};
+                }
+            }
+        },
+        verifyToken: {
+            type: AuthPayload,
+            args: { token: { type: new GraphQLNonNull(GraphQLString)}},
+            async resolve(parent, args) {
+                try {
+                    const decoded = await jwt.verify(args.token, config.get('secretKey'));
+                    const user = User.findById(decoded.userId);
+                    return {success: true, user};
+                }catch (err){
+                    return {error: {message: err}, success: false};
                 }
             }
         }
